@@ -14,3 +14,6 @@ export const copyTemplates = (path: string) => {
   copyFileSync(__dirname + "/templates/index.ts", p + "/index.ts");
   copyFileSync(__dirname + "/templates/input.json", p + "/input.json");
 };
+
+export const getModulePath = (moduleName: string) =>
+  __dirname + "/../aoc/" + moduleName;

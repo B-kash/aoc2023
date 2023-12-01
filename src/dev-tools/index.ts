@@ -1,6 +1,7 @@
 import { Command } from "commander";
-import { copyFileSync, existsSync, mkdirSync } from "fs";
-import { folderName } from "./utils";
+import { existsSync } from "fs";
+import { exec } from "shelljs";
+import { copyTemplates, folderName, getModulePath } from "./utils";
 
 const program = new Command();
 
@@ -9,21 +10,26 @@ const generate = (name: string) => {
   const moduleName = folderName(name);
   console.log("module name to be converted to ", moduleName);
 
-  const path = __dirname + "/../aoc/" + moduleName;
+  const path = getModulePath(moduleName);
+
   if (!existsSync(path)) {
-    const p = mkdirSync(path, { recursive: true });
-    copyFileSync(__dirname + "/templates/index.ts", p + "/index.ts");
-    copyFileSync(__dirname + "/templates/input.json", p + "/input.json");
+    copyTemplates(path);
   } else {
     console.log("This path already exists");
     return;
   }
 };
 
-program
-  .command("generate <moduleName>")
-  .action(generate)
-  .version("1.0.0")
-  .description("A simple CLI to run Advent of code 2023");
+const runModule = (name: string) => {
+  const moduleName = folderName(name);
+  const path = getModulePath(moduleName);
+  console.log(`********* Executing module on ${path} ***********`);
+  exec(`ts-node ${path}`);
+  console.log(`********* Done executing module on ${path} ***********`);
+};
+
+program.version("1.0.0").description("A simple CLI to run Advent of code 2023");
+program.command("exec <moduleName>").action(runModule);
+program.command("generate <moduleName>").action(generate);
 
 program.parse(process.argv);
