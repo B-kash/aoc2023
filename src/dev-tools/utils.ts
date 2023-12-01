@@ -1,3 +1,5 @@
+import { copyFileSync, mkdirSync } from "fs";
+
 export const folderName = (str: string) => {
   return str
     .replace(/\W+/g, " ")
