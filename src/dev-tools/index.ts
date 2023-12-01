@@ -1,23 +1,29 @@
 import { Command } from "commander";
-import { existsSync } from "fs";
+import { existsSync, readdirSync } from "fs";
 import { exec } from "shelljs";
-import { copyTemplates, folderName, getModulePath } from "./utils";
+import {
+  copyTemplates,
+  folderName,
+  getAllModules,
+  getModulePath,
+} from "./utils";
 
 const program = new Command();
 
 const generate = (name: string) => {
-  console.log(name);
-  const moduleName = folderName(name);
-  console.log("module name to be converted to ", moduleName);
+  console.log("******** Template generation started ********");
 
+  const moduleName = folderName(name);
   const path = getModulePath(moduleName);
 
   if (!existsSync(path)) {
     copyTemplates(path);
   } else {
-    console.log("This path already exists");
+    console.log("This module already exists skipping");
     return;
   }
+
+  console.log("******** Template generation completed ********");
 };
 
 const runModule = (name: string) => {
@@ -28,8 +34,18 @@ const runModule = (name: string) => {
   console.log(`********* Done executing module: ${moduleName} ***********`);
 };
 
+const listModules = () => {
+  const modulesList = readdirSync(getModulePath());
+  console.log(`********* Modules: ***********\n`);
+  modulesList.forEach((m) => {
+    console.log(m + "\n");
+  });
+  console.log(`********************\n`);
+};
+
 program.version("1.0.0").description("A simple CLI to run Advent of code 2023");
 program.command("exec <moduleName>").action(runModule);
 program.command("generate <moduleName>").action(generate);
+program.command("list").action(listModules);
 
 program.parse(process.argv);
