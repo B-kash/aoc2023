@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "aoc": "ts-node src/dev-tools"
+  },
   "dependencies": {
+    "commander": "^11.1.0",
     "typescript": "^5.3.2"
   },
   "devDependencies": {

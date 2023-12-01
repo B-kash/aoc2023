@@ -1,4 +1,4 @@
-const input = require("./input.json");
+import input from "./input.json";
 
 type NumberWithIndex = { min: number; max: number; val: string };
 
@@ -42,28 +42,6 @@ const textToNumberStringMap: Record<string, string> = {
   eight: "8",
   "9": "9",
   nine: "9",
-};
-
-const start = () => {
-  const sumOfCalibrationData = getCalibrationRows(input).reduce(
-    (currentValue, acc) => currentValue + acc,
-    0
-  );
-  console.log("result: ", sumOfCalibrationData);
-};
-
-const getCalibrationRows = (i: string[]): number[] => {
-  if (i.length <= 0) {
-    return [];
-  }
-  const calibrationData: number[] = [];
-  i.forEach((t) => {
-    if (t.length === 0) {
-      return;
-    }
-    calibrationData.push(getRowFromString(t));
-  });
-  return calibrationData;
 };
 
 const getMin = (a: NumberWithIndex, b: NumberWithIndex): NumberWithIndex => {
@@ -119,4 +97,29 @@ const getRowFromString = (text: string): number => {
   return calibrationData;
 };
 
+const parseInput = (i: string[]): number[] => {
+  if (i.length <= 0) {
+    return [];
+  }
+  const calibrationData: number[] = [];
+  i.forEach((t) => {
+    if (t.length === 0) {
+      return;
+    }
+    calibrationData.push(getRowFromString(t));
+  });
+  return calibrationData;
+};
+
+// main app code goes here
+const start = () => {
+  const parsedInput = parseInput(input);
+  const sumOfCalibrationData = parsedInput.reduce(
+    (currentValue, acc) => currentValue + acc,
+    0
+  );
+  console.log("result: ", sumOfCalibrationData);
+};
+
+// run the app
 start();
