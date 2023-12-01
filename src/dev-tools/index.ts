@@ -23,9 +23,9 @@ const generate = (name: string) => {
 const runModule = (name: string) => {
   const moduleName = folderName(name);
   const path = getModulePath(moduleName);
-  console.log(`********* Executing module on ${path} ***********`);
+  console.log(`********* Executing module: ${moduleName} ***********`);
   exec(`ts-node ${path}`);
-  console.log(`********* Done executing module on ${path} ***********`);
+  console.log(`********* Done executing module: ${moduleName} ***********`);
 };
 
 program.version("1.0.0").description("A simple CLI to run Advent of code 2023");
