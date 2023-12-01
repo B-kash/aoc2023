@@ -1,10 +1,9 @@
 import { Command } from "commander";
 import { existsSync, readdirSync } from "fs";
-import { exec } from "shelljs";
 import {
-  copyTemplates,
+  copyTemplatesWithDirectory,
+  executeModule,
   folderName,
-  getAllModules,
   getModulePath,
 } from "./utils";
 
@@ -12,26 +11,37 @@ const program = new Command();
 
 const generate = (name: string) => {
   console.log("******** Template generation started ********");
-
   const moduleName = folderName(name);
   const path = getModulePath(moduleName);
 
   if (!existsSync(path)) {
-    copyTemplates(path);
+    copyTemplatesWithDirectory(path);
   } else {
-    console.log("This module already exists skipping");
-    return;
+    console.log("\nThis module already exists skipping!!!");
+    console.log(
+      "Either change the module name or delete the existing module!!! \n"
+    );
+    process.exit(1);
   }
-
   console.log("******** Template generation completed ********");
 };
 
-const runModule = (name: string) => {
-  const moduleName = folderName(name);
-  const path = getModulePath(moduleName);
-  console.log(`********* Executing module: ${moduleName} ***********`);
-  exec(`ts-node ${path}`);
-  console.log(`********* Done executing module: ${moduleName} ***********`);
+const runModule = (name: string = "", options?: any) => {
+  let modules: string[] = [];
+
+  if (options.all) {
+    modules.push(...readdirSync(getModulePath()));
+  } else {
+    if (!name) {
+      console.log(
+        "-a flag or module name argument is required to execute a module"
+      );
+      process.exit(1);
+    }
+    modules = [name];
+  }
+  modules.forEach(executeModule);
+  console.log("****** Completed execution ***********");
 };
 
 const listModules = () => {
@@ -43,8 +53,13 @@ const listModules = () => {
   console.log(`********************\n`);
 };
 
-program.version("1.0.0").description("A simple CLI to run Advent of code 2023");
-program.command("exec <moduleName>").action(runModule);
+program.version("1.0.0").description("A simple CLI for Advent of code 2023");
+
+program
+  .command("exec [moduleName]")
+  .option("-a, --all", "execute all modules")
+  .action(runModule);
+
 program.command("generate <moduleName>").action(generate);
 program.command("list").action(listModules);
 

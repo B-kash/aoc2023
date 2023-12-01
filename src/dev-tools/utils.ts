@@ -1,4 +1,5 @@
-import { copyFileSync, mkdirSync, readdirSync } from "fs";
+import { copyFileSync, mkdirSync } from "fs";
+import { exec } from "shelljs";
 
 export const folderName = (str: string) => {
   return str
@@ -9,7 +10,7 @@ export const folderName = (str: string) => {
     .join("-");
 };
 
-export const copyTemplates = (path: string) => {
+export const copyTemplatesWithDirectory = (path: string) => {
   const p = mkdirSync(path, { recursive: true });
   copyFileSync(__dirname + "/templates/index.ts", p + "/index.ts");
   console.log("Generated file", p + "/index.ts");
@@ -19,3 +20,14 @@ export const copyTemplates = (path: string) => {
 
 export const getModulePath = (moduleName: string = "") =>
   __dirname + "/../aoc/" + moduleName;
+
+export const executeModule = (moduleIdentifier: string) => {
+  const moduleName = folderName(moduleIdentifier);
+
+  const path = getModulePath(moduleName);
+  console.log(`********* Executing module: ${moduleIdentifier} ***********`);
+  exec(`ts-node ${path}`);
+  console.log(
+    `********* Done executing module: ${moduleIdentifier} ***********\n`
+  );
+};
