@@ -55,7 +55,7 @@ const findMinRequiredColorCubes = (rounds: ColorScheme[]) => {
   return scheme;
 };
 
-const resolvePart_2 = (parsedInput: Record<number, ColorScheme[]>) => {
+const resolvePart2 = (parsedInput: Record<number, ColorScheme[]>) => {
   let cubeSum = 0;
   for (const gameNumber in parsedInput) {
     const rounds = parsedInput[gameNumber];
@@ -91,7 +91,7 @@ const resolvePart1 = (parsedInput: Record<number, ColorScheme[]>) => {
 const start = () => {
   const parsedInput = parseInput(input);
   console.log("result part1: ", resolvePart1(parsedInput));
-  console.log("result part2: ", resolvePart_2(parsedInput));
+  console.log("result part2: ", resolvePart2(parsedInput));
 };
 
 // run the app
