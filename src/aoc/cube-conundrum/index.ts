@@ -90,7 +90,6 @@ const resolvePart1 = (parsedInput: Record<number, ColorScheme[]>) => {
 // main app code goes here
 const start = () => {
   const parsedInput = parseInput(input);
-  console.log(parsedInput);
   console.log("result part1: ", resolvePart1(parsedInput));
   console.log("result part2: ", resolvePart_2(parsedInput));
 };
