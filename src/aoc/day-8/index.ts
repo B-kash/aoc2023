@@ -42,7 +42,46 @@ const resolvePart1 = (input: NetworkMap) => {
   return path.length - 1;
 }
 
-const resolvePart2 = (i: NetworkMap) => { };
+const getNextNode = (network: Record<string, string[]>, current: string, direction: Direction): string => {
+  return network[current][direction == "L" ? 0 : 1];
+};
+
+const solveMathematically = (map: NetworkMap): number => {
+  const result = []
+  for (let [key, value] of Object.entries(map.network)) {
+    if (!key.endsWith("A")) {
+      continue;
+    }
+    let steps = 0
+    while (!key.endsWith("Z")) {
+      key =  (map.network, key, map.instructions[steps % map.instructions.length]);
+      steps++;
+    }
+    result.push(steps);
+  }
+  let val = result[0]
+  for (let i = 0; i < result.length; i++) {
+    val = lcm(val, result[i]);
+  }
+  return val;
+}
+
+const lcm = (a: number, b: number) => {
+  return a / gcd(a, b) * b;
+}
+
+const gcd = (a: number, b: number) => {
+  while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+  }
+  return a;
+}
+
+const resolvePart2 = (i: NetworkMap) => {
+  return solveMathematically(i);
+};
 
 // main app code goes here
 const start = () => {
